@@ -1,0 +1,28 @@
+--cpu=Cortex-M4.fp.sp
+"keyled\startup_stm32g431xx.o"
+"keyled\main.o"
+"keyled\gpio.o"
+"keyled\tim.o"
+"keyled\stm32g4xx_it.o"
+"keyled\stm32g4xx_hal_msp.o"
+"keyled\stm32g4xx_hal_tim.o"
+"keyled\stm32g4xx_hal_tim_ex.o"
+"keyled\stm32g4xx_hal_pwr_ex.o"
+"keyled\stm32g4xx_hal.o"
+"keyled\stm32g4xx_hal_rcc.o"
+"keyled\stm32g4xx_hal_rcc_ex.o"
+"keyled\stm32g4xx_hal_flash.o"
+"keyled\stm32g4xx_hal_flash_ex.o"
+"keyled\stm32g4xx_hal_flash_ramfunc.o"
+"keyled\stm32g4xx_hal_gpio.o"
+"keyled\stm32g4xx_hal_exti.o"
+"keyled\stm32g4xx_hal_dma.o"
+"keyled\stm32g4xx_hal_dma_ex.o"
+"keyled\stm32g4xx_hal_pwr.o"
+"keyled\stm32g4xx_hal_cortex.o"
+"keyled\system_stm32g4xx.o"
+"keyled\multi_button.o"
+--library_type=microlib --strict --scatter "keyled\keyled.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "keyled.map" -o keyled\keyled.axf
