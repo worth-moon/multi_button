@@ -161,7 +161,7 @@
   */
 void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
 {
-  uint32_t position = 0x00U;
+  uint32_t position = 0x00U;//轮询引脚
   uint32_t iocurrent;
   uint32_t temp;
 
@@ -174,7 +174,7 @@ void HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init)
   while (((GPIO_Init->Pin) >> position) != 0U)
   {
     /* Get current io position */
-    iocurrent = (GPIO_Init->Pin) & (1UL << position);
+    iocurrent = (GPIO_Init->Pin) & (1UL << position);//找到需要配置的引脚
 
     if (iocurrent != 0x00u)
     {

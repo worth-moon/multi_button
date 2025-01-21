@@ -16,16 +16,17 @@
 #define LONG_TICKS        (1000 /TICKS_INTERVAL)
 
 
+
 typedef void (*BtnCallback)(void*);
 
 typedef enum {
-	PRESS_DOWN = 0,
-	PRESS_UP,
-	PRESS_REPEAT,
-	SINGLE_CLICK,
-	DOUBLE_CLICK,
-	LONG_PRESS_START,
-	LONG_PRESS_HOLD,
+	PRESS_DOWN = 0,		//按键按下
+	PRESS_UP,			//按键抬起
+	PRESS_REPEAT,		//按键重复按下
+	SINGLE_CLICK,		//单击
+	DOUBLE_CLICK,		//双击
+	LONG_PRESS_START,	//长按开始
+	LONG_PRESS_HOLD,	//长按持续
 	number_of_event,
 	NONE_PRESS
 }PressEvent;

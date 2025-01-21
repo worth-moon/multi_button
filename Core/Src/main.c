@@ -19,11 +19,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "multi_button.h"
+#include "string.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,6 +55,11 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void BTN1_PRESS_DOWN_Handler(void* btn);
 void BTN1_PRESS_UP_Handler(void* btn);
+void BTN1_PRESS_REPEAT_Handler(void* btn);
+void BTN1_SINGLE_Click_Handler(void* btn);
+void BTN1_DOUBLE_Click_Handler(void* btn);
+void BTN1_LONG_PRESS_START_Handler(void* btn);
+void BTN1_LONG_PRESS_HOLD_Handler(void* btn);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -63,6 +71,16 @@ enum Button_IDs {
 
 struct Button btn1;
 struct Button btn2;
+
+const char* multiButtonEventStrings[] = {
+	"PRESS_DOWN\r\n",
+	"PRESS_UP\r\n",
+	"PRESS_REPEAT\r\n",
+	"SINGLE_CLICK\r\n",
+	"DOUBLE_CLICK\r\n",
+	"LONG_PRESS_START\r\n",
+	"LONG_PRESS_HOLD\r\n",
+};
 
 uint8_t read_button_GPIO(uint8_t button_id)
 {
@@ -111,18 +129,19 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM17_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  button_init(&btn1, read_button_GPIO, 0, btn1_id);
-  button_init(&btn2, read_button_GPIO, 0, btn2_id);
+  button_init(&btn1, read_button_GPIO, 1, btn1_id);
+  button_init(&btn2, read_button_GPIO, 1, btn2_id);
 
   button_attach(&btn1, PRESS_DOWN, BTN1_PRESS_DOWN_Handler);
   button_attach(&btn1, PRESS_UP, BTN1_PRESS_UP_Handler);
-//  button_attach(&btn1, PRESS_REPEAT, BTN1_PRESS_REPEAT_Handler);
-//  button_attach(&btn1, SINGLE_CLICK, BTN1_SINGLE_Click_Handler);
-//  button_attach(&btn1, DOUBLE_CLICK, BTN1_DOUBLE_Click_Handler);
-//  button_attach(&btn1, LONG_PRESS_START, BTN1_LONG_PRESS_START_Handler);
-//  button_attach(&btn1, LONG_PRESS_HOLD, BTN1_LONG_PRESS_HOLD_Handler);
+  button_attach(&btn1, PRESS_REPEAT, BTN1_PRESS_REPEAT_Handler);
+  button_attach(&btn1, SINGLE_CLICK, BTN1_SINGLE_Click_Handler);
+  button_attach(&btn1, DOUBLE_CLICK, BTN1_DOUBLE_Click_Handler);
+  button_attach(&btn1, LONG_PRESS_START, BTN1_LONG_PRESS_START_Handler);
+  button_attach(&btn1, LONG_PRESS_HOLD, BTN1_LONG_PRESS_HOLD_Handler);
 
 //  button_attach(&btn2, PRESS_DOWN, BTN2_PRESS_DOWN_Handler);
 //  button_attach(&btn2, PRESS_UP, BTN2_PRESS_UP_Handler);
@@ -135,12 +154,14 @@ int main(void)
   button_start(&btn1);
   button_start(&btn2);
   HAL_TIM_Base_Start_IT(&htim17);
+  assert_param(0);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -203,18 +224,42 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 	}
 }
 
+uint8_t tx_buffer[100];
 void BTN1_PRESS_DOWN_Handler(void* btn)
 {
+	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 0);
 	//do something...
-	key_state = 1;
-	HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+	HAL_UART_Transmit(&huart3, (const uint8_t *)multiButtonEventStrings[0], strlen(multiButtonEventStrings[0]), 1000);
 }
 
 void BTN1_PRESS_UP_Handler(void* btn)
 {
+	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
 	//do something...
-	key_state = 2;
-	HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+	HAL_UART_Transmit(&huart3, (const uint8_t *)multiButtonEventStrings[1], strlen(multiButtonEventStrings[1]), 1000);
+}
+
+void BTN1_PRESS_REPEAT_Handler(void* btn)
+{
+	HAL_UART_Transmit(&huart3, (const uint8_t*)multiButtonEventStrings[2], strlen(multiButtonEventStrings[2]), 1000);
+}
+
+void BTN1_SINGLE_Click_Handler(void* btn)
+{
+	HAL_UART_Transmit(&huart3, (const uint8_t*)multiButtonEventStrings[3], strlen(multiButtonEventStrings[3]), 1000);
+}
+void BTN1_DOUBLE_Click_Handler(void* btn)
+{
+	HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, 0);
+	HAL_UART_Transmit(&huart3, (const uint8_t*)multiButtonEventStrings[4], strlen(multiButtonEventStrings[4]), 1000);
+}
+void BTN1_LONG_PRESS_START_Handler(void* btn)
+{
+	HAL_UART_Transmit(&huart3, (const uint8_t*)multiButtonEventStrings[5], strlen(multiButtonEventStrings[5]), 1000);
+}
+void BTN1_LONG_PRESS_HOLD_Handler(void* btn)
+{
+	HAL_UART_Transmit(&huart3, (const uint8_t*)multiButtonEventStrings[6], strlen(multiButtonEventStrings[6]), 1000);
 }
 /* USER CODE END 4 */
 
@@ -243,6 +288,9 @@ void Error_Handler(void)
   */
 void assert_failed(uint8_t *file, uint32_t line)
 {
+	uint8_t debug_data[100];
+	sprintf((char*)debug_data, "Wrong parameters value: file %s on line %d\r\n", file, line);
+	HAL_UART_Transmit(&huart3, debug_data, strlen((char*)debug_data), 1000);
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

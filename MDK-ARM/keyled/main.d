@@ -30,7 +30,11 @@ keyled\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr.h
 keyled\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h
 keyled\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h
 keyled\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
+keyled\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
+keyled\main.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 keyled\main.o: ../Core/Inc/tim.h
+keyled\main.o: ../Core/Inc/usart.h
 keyled\main.o: ../Core/Inc/gpio.h
-keyled\main.o: ..\USER\BSP\MUL_BTN\multi_button.h
+keyled\main.o: ../USER/BSP/MUL_BTN/multi_button.h
 keyled\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+keyled\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

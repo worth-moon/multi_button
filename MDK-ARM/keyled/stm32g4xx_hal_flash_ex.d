@@ -29,3 +29,5 @@ keyled\stm32g4xx_hal_flash_ex.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_h
 keyled\stm32g4xx_hal_flash_ex.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_pwr_ex.h
 keyled\stm32g4xx_hal_flash_ex.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h
 keyled\stm32g4xx_hal_flash_ex.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
+keyled\stm32g4xx_hal_flash_ex.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
+keyled\stm32g4xx_hal_flash_ex.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
